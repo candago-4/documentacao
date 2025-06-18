@@ -1,5 +1,3 @@
-# documentacao 
-
 # Documentação Unificada do Projeto Candago-4
 
 Este repositório contém a documentação centralizada para os repositórios **backend** e **frontend** do projeto Candago-4.
