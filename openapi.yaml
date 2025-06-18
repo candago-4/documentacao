@@ -1,1 +1,234 @@
+openapi: 3.0.3
+info:
+  title: API Candago-4 Backend
+  version: "1.0.0"
+  description: API REST do backend do projeto Candago-4
+servers:
+  - url: http://localhost:3000
+paths:
+  /register:
+    post:
+      summary: Registrar novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        '201':
+          description: Usuário registrado
+        '400':
+          description: Dados inválidos
+  /login:
+    post:
+      summary: Autenticar usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: Sucesso, retorna token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      username:
+                        type: string
+        '401':
+          description: Credenciais inválidas
+  /validate-token:
+    get:
+      summary: Validar token JWT
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: Bearer token
+      responses:
+        '200':
+          description: Token válido
+        '401':
+          description: Token inválido
+  /devices:
+    get:
+      summary: Listar dispositivos
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Lista de dispositivos
+    post:
+      summary: Criar dispositivo
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+              required:
+                - name
+      responses:
+        '201':
+          description: Dispositivo criado
+  /devices/{id}:
+    put:
+      summary: Atualizar dispositivo
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Dispositivo atualizado
+    delete:
+      summary: Remover dispositivo
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: Dispositivo removido
+  /deviceStats:
+    get:
+      summary: Estatísticas de dispositivos
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: deviceId
+          schema:
+            type: string
+        - in: query
+          name: from
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: to
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Estatísticas retornadas
+  /gps:
+    get:
+      summary: Listar leituras de GPS
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: deviceId
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Leituras de GPS retornadas
+  /persistence:
+    post:
+      summary: Persistência auxiliar de dados
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              # Esquema genérico; detalhe conforme implementação
+              additionalProperties: true
+      responses:
+        '200':
+          description: Dados persistidos
+  /home:
+    get:
+      summary: Verificar saúde do serviço
+      responses:
+        '200':
+          description: Serviço ativo
 
